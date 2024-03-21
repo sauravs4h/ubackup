@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-depl
+  namespace: umla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin
+  template:
+    metadata:
+      labels:
+        app: admin
+    spec:
+      containers:
+      - name: admin
+        image: testwincontainers.azurecr.io/umlaadmin
+        imagePullPolicy: Always
+        env:
+        - name: AUTH_PORT
+          value: '3000'
+        - name: ADMIN_PORT
+          value: '3006'
+        - name: SWIPE_PORT
+          value: '3002'
+        - name: REDIS_URI
+          value: redis
+        - name: REDIS_PORT
+          value: '6379'
+        - name: JWT_SECRET
+          value: 'mS7HSY5y0qx9SlUufOQn/A=='
+        - name: AUTH_SERVICE
+          value: 'http://auth-srv:3000'
+        - name: BLOB_CONNECTION_STRING
+          value: 'DefaultEndpointsProtocol=https;AccountName=2023testwin9581639170;AccountKey=+fqeKxyzged+7qbCylIBrObg8Hr/ibmVoqK0BA/qNCAKUWfx1VS+ziZkyZpTZMEUALyN/RQiYQLF+AStm1bf/A==;EndpointSuffix=core.windows.net'
+        - name: BLOB_CONTAINER_NAME
+          value: 'umla'
+        - name: MSG_SENDER_ID
+          value: 'WOLUKA'
+        - name: BLOB_CONNECTION_STRING
+          value: 'DefaultEndpointsProtocol=https;AccountName=2023testwin9581639170;AccountKey=+fqeKxyzged+7qbCylIBrObg8Hr/ibmVoqK0BA/qNCAKUWfx1VS+ziZkyZpTZMEUALyN/RQiYQLF+AStm1bf/A==;EndpointSuffix=core.windows.net'
+        - name: BLOB_CONTAINER_NAME
+          value: 'umla'
+        - name: MSG_TEMPLATE_ID
+          value: '64aea1b0d6fc0531fd0bc303'
+        - name: MSG_AUTH_KEY
+          value: '400129A8NwNrpkb64a7e5e4P1'
+        - name: MONGO_URI
+          value: 'mongodb://testwinproddb:GEjpqsis9mmAZB4zbXvThk9s98ElSdxBUIbmiJtVjOdBewX3uWK2e1JGJpsotW3xxImuh3UR6LwVACDbk3eCkQ==@testwinproddb.mongo.cosmos.azure.com:10255/umla?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@testwinproddb@'        
+        - name: FIREBASE_KEY
+          value: "AAAAmWi6wHU:APA91bFUyQgZv_B1gdhPvpaMV3TSbErwur1XyjPXWoaEar0fSAVoJWJcO2Yg5p_8Z-c7XYP1k_uX7yTfLJZ9aL6uWdR9s4f0ghRujuRntcaY06sOGpP--mA-mHlzlBZ0eHn1zPOV8RPX"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-srv
+spec:
+  selector:
+    app: admin
+  ports:
+  - name: admin
+    protocol: TCP
+    port: 3006
+    targetPort: 3006

@@ -1,0 +1,125 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-umla-srv
+  namespace: umla
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/v1/umla/userAuth
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-srv
+            port:
+              number: 3000
+      - path: /api/v1/umla/validate
+        pathType: Prefix
+        backend:
+          service:
+            name: auth-srv
+            port:
+              number: 3000
+      - path: /api/v1/umla/user
+        pathType: Prefix
+        backend:
+          service:
+            name: user-srv
+            port:
+              number: 3001
+      - path: /api/v1/umla/swipe
+        pathType: Prefix
+        backend:
+          service:
+            name: swipe-srv
+            port:
+              number: 3002
+      - path: /api/v1/umla/chat
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-srv
+            port:
+              number: 3003
+      - path: /chatSocket
+        pathType: Prefix
+        backend:
+          service:
+            name: chat-srv
+            port:
+              number: 3003
+      - path: /api/v1/umla/partner
+        pathType: Prefix
+        backend:
+          service:
+            name: partner-srv
+            port:
+              number: 3005
+      - path: /api/v1/umla/admin
+        pathType: Prefix
+        backend:
+          service:
+            name: admin-srv
+            port:
+              number: 3006
+      - path: /api/v1/umla/offer
+        pathType: Prefix
+        backend:
+          service:
+            name: offer-srv
+            port:
+              number: 3007
+      - path: /api/v1/umla/payment
+        pathType: Prefix
+        backend:
+          service:
+            name: payment-srv
+            port:
+              number: 3008
+      - path: /api/v1/umla/subscription
+        pathType: Prefix
+        backend:
+          service:
+            name: subscription-srv
+            port:
+              number: 3009
+      - path: /api/v1/umla/dashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: partnerdashboard-srv
+            port:
+              number: 3010
+      - path: /partnerSocket
+        pathType: Prefix
+        backend:
+          service:
+            name: partnerdashboard-srv
+            port:
+              number: 3010
+      - path: /umla/kds
+        pathType: Prefix
+        backend:
+          service:
+            name: kds-srv
+            port:
+              number: 3101
+      - path: /umla/partnerDashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: partner-dashboard-site-srv
+            port:
+              number: 3100
+      - path: /umla/dashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: umla-dashboard-srv
+            port:
+              number: 3200

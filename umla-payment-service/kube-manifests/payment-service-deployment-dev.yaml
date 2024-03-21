@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-depl
+  namespace: umla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+      - name: payment
+        image: testwincontainers.azurecr.io/umlapayment
+        imagePullPolicy: Always
+        env:
+        - name: AUTH_PORT
+          value: '3000'
+        - name: PAYMENT_PORT
+          value: '3008'
+        - name: REDIS_URI
+          value: redis
+        - name: REDIS_PORT
+          value: '6379'
+        - name: JWT_SECRET
+          value: 'mS7HSY5y0qx9SlUufOQn/A=='
+        - name: AUTH_SERVICE
+          value: 'http://auth-srv:3000'
+        - name: MSG_SENDER_ID
+          value: 'WOLUKA'
+        - name: MSG_TEMPLATE_ID
+          value: '64aea1b0d6fc0531fd0bc303'
+        - name: MSG_AUTH_KEY
+          value: '400129A8NwNrpkb64a7e5e4P1'
+        - name: MONGO_URI
+          value: 'mongodb://testwinproddb:GEjpqsis9mmAZB4zbXvThk9s98ElSdxBUIbmiJtVjOdBewX3uWK2e1JGJpsotW3xxImuh3UR6LwVACDbk3eCkQ==@testwinproddb.mongo.cosmos.azure.com:10255/umla?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@testwinproddb@'
+        - name: FIREBASE_KEY
+          value: "AAAAmWi6wHU:APA91bFUyQgZv_B1gdhPvpaMV3TSbErwur1XyjPXWoaEar0fSAVoJWJcO2Yg5p_8Z-c7XYP1k_uX7yTfLJZ9aL6uWdR9s4f0ghRujuRntcaY06sOGpP--mA-mHlzlBZ0eHn1zPOV8RPX"
+        - name: x_client_id
+          value: 2420857c97f169e87e560f74db580242
+        - name: x_client_secret
+          value: eac4b20066d61fc6d4f48b9053f83db5e28fb6a5
+        - name: payout_x_client_id
+          value: CF242085CIE36LFH3V7NR4ESM55G
+        - name: payout_x_client_secret
+          value: 9b4dfa6f5984913afb4bd1b62725073eb22c057e
+        - name: merchant_id
+          value: 'UMLAONLINE'
+        - name: salt_key
+          value: 'b5127d64-6c95-4af4-914e-2a5b94e43b7f'
+        - name: salt_index
+          value: '1'
+        - name: payment_url
+          value: https://api.phonepe.com/apis/hermes
+        - name: server
+          value: https://payment.umla.in
+        - name: self
+          value: http://payment-srv:3008
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-srv
+spec:
+  selector:
+    app: payment
+  ports:
+  - name: payment
+    protocol: TCP
+    port: 3008
+    targetPort: 3008

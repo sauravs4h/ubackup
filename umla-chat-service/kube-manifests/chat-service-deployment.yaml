@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-depl
+  namespace: umla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat
+  template:
+    metadata:
+      labels:
+        app: chat
+    spec:
+      containers:
+      - name: chat
+        image: testwincontainers.azurecr.io/umlachat
+        imagePullPolicy: Always
+        env:
+        - name: AUTH_PORT
+          value: '3000'
+        - name: SWIPE_PORT
+          value: '3002'
+        - name: CHAT_PORT
+          value: '3003'
+        - name: REDIS_URI
+          value: redis
+        - name: REDIS_PORT
+          value: '6379'
+        - name: AUTH_SERVICE
+          value: 'http://auth-srv:3000'
+        - name: JWT_SECRET
+          value: 'mS7HSY5y0qx9SlUufOQn/A=='
+        - name: MSG_SENDER_ID
+          value: 'WOLUKA'
+        - name: MSG_TEMPLATE_ID
+          value: '64aea1b0d6fc0531fd0bc303'
+        - name: MSG_AUTH_KEY
+          value: '400129A8NwNrpkb64a7e5e4P1'
+        - name: MONGO_URI
+          value: 'mongodb://umlaproddb:UFH7SL1iIfu1Z65xSBdPZeUTQq0YrmEesXJ1Mv65AkML6CpmRKtetberTXtfDnkZ3mhocufNX9RHACDbm9vf7A==@umlaproddb.mongo.cosmos.azure.com:10255/umla?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@umlaproddb@'
+        - name: FIREBASE_KEY
+          value: "AAAAmWi6wHU:APA91bFUyQgZv_B1gdhPvpaMV3TSbErwur1XyjPXWoaEar0fSAVoJWJcO2Yg5p_8Z-c7XYP1k_uX7yTfLJZ9aL6uWdR9s4f0ghRujuRntcaY06sOGpP--mA-mHlzlBZ0eHn1zPOV8RPX"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-srv
+spec:
+  selector:
+    app: chat
+  ports:
+  - name: chat
+    protocol: TCP
+    port: 3003
+    targetPort: 3003

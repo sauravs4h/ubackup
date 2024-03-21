@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: umla-dashboard-depl
+  namespace: umla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: umla-dashboard
+  template:
+    metadata:
+      labels:
+        app: umla-dashboard
+    spec:
+      containers:
+      - name: umla-dashboard
+        image: testwincontainers.azurecr.io/umlaadmindashboard
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: umla-dashboard-srv
+spec:
+  selector:
+    app: umla-dashboard
+  ports:
+  - name: umla-dashboard
+    protocol: TCP
+    port: 3200
+    targetPort: 3200

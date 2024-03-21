@@ -1,0 +1,24 @@
+.pagination__link--active{
+    color: white;
+    background-color: #515ADA;
+}
+
+.pagination__link{
+    font-size: larger;
+    border: solid 1px #646464;
+    padding: 6pt 10pt;
+    border-color: black;
+    margin: 0 20pt;
+    border-radius: 0.3rem;
+
+}
+
+.pagination-page{
+   
+    border: solid 1px #646464;
+    padding: 6pt 15pt;
+    font-size: large;
+    border-radius: 0.3rem;
+
+
+}

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-depl
+  namespace: umla
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+      - name: user
+        image: testwincontainers.azurecr.io/umlauser
+        imagePullPolicy: Always
+        env:
+        - name: AUTH_PORT
+          value: '3000'
+        - name: USER_PORT
+          value: '3001'
+        - name: AUTH_SERVICE
+          value: 'http://auth-srv:3000'
+        - name: REDIS_URI
+          value: redis
+        - name: REDIS_PORT
+          value: '6379'
+        - name: JWT_SECRET
+          value: 'mS7HSY5y0qx9SlUufOQn/A=='
+        - name: MSG_SENDER_ID
+          value: 'WOLUKA'
+        - name: MSG_TEMPLATE_ID
+          value: '64aea1b0d6fc0531fd0bc303'
+        - name: MSG_AUTH_KEY
+          value: '400129A8NwNrpkb64a7e5e4P1'
+        - name: MONGO_URI
+          value: 'mongodb://testwinproddb:GEjpqsis9mmAZB4zbXvThk9s98ElSdxBUIbmiJtVjOdBewX3uWK2e1JGJpsotW3xxImuh3UR6LwVACDbk3eCkQ==@testwinproddb.mongo.cosmos.azure.com:10255/umla?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@testwinproddb@'
+        - name: BLOB_CONNECTION_STRING
+          value: 'DefaultEndpointsProtocol=https;AccountName=2023testwin9581639170;AccountKey=+fqeKxyzged+7qbCylIBrObg8Hr/ibmVoqK0BA/qNCAKUWfx1VS+ziZkyZpTZMEUALyN/RQiYQLF+AStm1bf/A==;EndpointSuffix=core.windows.net'
+        - name: BLOB_CONTAINER_NAME
+          value: 'umla'
+        - name: x_client_id
+          value: 'CF242085CK1AP93D1B0NVVKDGOA0'
+        - name: x_client_secret
+          value: 'f442b49fa58d5672012730f3166f92fcf5dbc640'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-srv
+spec:
+  selector:
+    app: user
+  ports:
+  - name: user
+    protocol: TCP
+    port: 3001
+    targetPort: 3001
